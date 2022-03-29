@@ -1,4 +1,4 @@
-package Tasks;
+package tasks;
 
 public class Task {
     private int idNumber;
@@ -18,36 +18,36 @@ public class Task {
         return idNumber;
     }
 
-    public String getNameTask(){
+    public String getNameTask() {
         return nameTask;
     }
 
-    public String getInfoTask(){
+    public String getInfoTask() {
         return infoTask;
     }
 
-    public String getStatusTask(){
+    public String getStatusTask() {
         return statusTask;
     }
 
-    public void setIdNumber(int idNumber){
+    public void setIdNumber(int idNumber) {
         this.idNumber = idNumber;
     }
 
-    public void setNameTask(String nameTask){
+    public void setNameTask(String nameTask) {
         this.nameTask = nameTask;
     }
 
-    public void setInfoTask(String infoTask){
+    public void setInfoTask(String infoTask) {
         this.infoTask = infoTask;
     }
 
-    public void setStatusTask(String statusTask){
+    public void setStatusTask(String statusTask) {
         this.statusTask = statusTask;
     }
 
     @Override
-    public String toString (){
+    public String toString() {
         return "Номер: " + idNumber + ", название: " + nameTask + ", Информация: " + infoTask + ", Статус:" +
                 statusTask;
     }

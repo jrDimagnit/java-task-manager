@@ -1,9 +1,9 @@
-package Tasks;
+package tasks;
 
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    private ArrayList<SubTask> subTasks;
+    private ArrayList<SubTask> subTasks = new ArrayList<>();
     private String statusTask;
 
     public Epic(int idEpic, String nameTask, String info, String statusTask) {
@@ -18,7 +18,7 @@ public class Epic extends Task {
     @Override
     public String toString() {
         return "Номер эпика: " + getIdNumber() + ", Имя Эпика: " + getNameTask() + ", Статус:" +
-                 statusTask + ", Подзадачи:" + getSubTasks();
+                statusTask + ", Подзадачи:" + getSubTasks();
     }
 
     public String getStatusTask() {
@@ -30,7 +30,7 @@ public class Epic extends Task {
     }
 
     public ArrayList<SubTask> getSubTasks() {
-          return subTasks;
-        }
+        return subTasks;
+    }
 
 }

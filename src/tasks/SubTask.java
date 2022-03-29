@@ -1,7 +1,7 @@
-package Tasks;
+package tasks;
 
 public class SubTask extends Task {
-    Integer mainEpic;
+    private Integer mainEpic;
 
     public SubTask(int idNumber, String nameTask, String infoTask, int mainEpic, String statusTask) {
         super(idNumber, nameTask, infoTask, statusTask);
