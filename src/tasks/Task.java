@@ -4,10 +4,10 @@ public class Task {
     private int idNumber;
     private String nameTask;
     private String infoTask;
-    private String statusTask;
+    private StatusTask statusTask;
 
 
-    public Task(int idNumber, String nameTask, String infoTask, String statusTask) {
+    public Task(int idNumber, String nameTask, String infoTask, StatusTask statusTask) {
         this.idNumber = idNumber;
         this.nameTask = nameTask;
         this.infoTask = infoTask;
@@ -26,7 +26,7 @@ public class Task {
         return infoTask;
     }
 
-    public String getStatusTask() {
+    public StatusTask getStatusTask() {
         return statusTask;
     }
 
@@ -42,7 +42,7 @@ public class Task {
         this.infoTask = infoTask;
     }
 
-    public void setStatusTask(String statusTask) {
+    public void setStatusTask(StatusTask statusTask) {
         this.statusTask = statusTask;
     }
 
