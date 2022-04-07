@@ -116,6 +116,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void updateSubTask(SubTask subTask) {
         if (listSubTask.containsKey(subTask.getIdNumber())) {
             Epic epic = listEpic.get(subTask.getMainEpic());
+            removeFromEpic(subTask);
             epic.getSubTasks().add(subTask);
             setStatusEpic(epic);
             listSubTask.put(subTask.getIdNumber(), subTask);
@@ -126,32 +127,37 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic getEpicById(int taskId) {
-        if (listEpic.containsKey(taskId)) {
-            inMemory.addHistory(listEpic.get(taskId));
+        Epic epic = listEpic.get(taskId);
+        if(epic!=null){
+            inMemory.addHistory(epic);
+            return epic;
         }
-        return listEpic.get(taskId);
+        return null;
     }
 
     @Override
     public SubTask getSubById(int taskId) {
-        if (listSubTask.containsKey(taskId)) {
-            inMemory.addHistory(listSubTask.get(taskId));
+        SubTask subTask = listSubTask.get(taskId);
+        if(subTask!=null){
+            inMemory.addHistory(subTask);
+            return subTask;
         }
-        return listSubTask.get(taskId);
+        return null;
     }
 
     @Override
     public Task getTaskById(int taskId) {
-        if (listTask.containsKey(taskId)) {
-            inMemory.addHistory(listTask.get(taskId));
+        Task task = listTask.get(taskId);
+        if(task!=null){
+            inMemory.addHistory(task);
+            return task;
         }
-        return listTask.get(taskId);
+        return null;
     }
 
     @Override
     public void updateEpic(Epic epic) {
         if (listEpic.containsKey(epic.getIdNumber())) {
-            setStatusEpic(epic);
             listEpic.put(epic.getIdNumber(), epic);
         } else {
             System.out.println("Id not found");
