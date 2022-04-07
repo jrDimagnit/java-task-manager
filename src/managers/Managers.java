@@ -1,6 +1,6 @@
 package managers;
 
-public class Managers<T extends TaskManager> {
+public class Managers {
 
     public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();

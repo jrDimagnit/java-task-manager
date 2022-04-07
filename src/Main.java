@@ -65,11 +65,9 @@ public class Main {
 
         manager.updateSubTask(subtask3);
 
-        manager.removeId(3);
 
         System.out.println("______________DELETE____________");
 
-        manager.removeId(2);
 
         System.out.println("_____________________EPIC DELETE___________");
 

@@ -5,7 +5,6 @@ import tasks.SubTask;
 import tasks.Task;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public interface TaskManager {
 
@@ -17,19 +16,20 @@ public interface TaskManager {
 
     void addEpic(Epic epic);
 
-    HashMap<Integer, Task> getAllTask();
+    ArrayList<Task> getAllTask();
 
-    HashMap<Integer, SubTask> getAllSubTask();
+    ArrayList<SubTask> getAllSubTask();
 
-    HashMap<Integer, Epic> getAllEpic();
+    ArrayList<Epic> getAllEpic();
 
     ArrayList<SubTask> subInEpic(int taskId);
 
-    void removeAll();
+    void removeIdTask(int idTask);
 
-    void removeId(int idTask);
+    void removeIdSub(int idTask);
 
-    String getStatus(int taskId);
+    void removeIdEpic(int idTask);
+
 
     void updateTask(Task task);
 
