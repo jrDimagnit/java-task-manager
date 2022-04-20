@@ -18,7 +18,7 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return super.toString() + ", Новет эпика: " + mainEpic;
+        return super.toString() + ", Ep: " + mainEpic;
     }
 
 }

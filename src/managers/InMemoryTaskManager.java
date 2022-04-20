@@ -43,16 +43,28 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public void removeAllEpic() {
+        for (Epic epic : listEpic.values()){
+            inMemory.remove(epic.getIdNumber());
+            for(SubTask subtask : listSubTask.values()){
+                if(epic.getIdNumber() == subtask.getMainEpic()){
+                    inMemory.remove(subtask.getIdNumber());
+                }
+            }
+        }
         listSubTask.clear();
         listEpic.clear();
     }
 
     public void removeAllTask() {
+        for (Task task : listTask.values()){
+            inMemory.remove(task.getIdNumber());
+        }
         listTask.clear();
     }
 
     public void removeAllSub() {
         for (SubTask subTask : listSubTask.values()) {
+            inMemory.remove(subTask.getIdNumber());
             Epic epic = listEpic.get(subTask.getMainEpic());
             epic.getSubTasks().clear();
             setStatusEpic(epic);
@@ -83,6 +95,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeIdTask(int idTask) {
+        inMemory.remove(idTask);
         listTask.remove(idTask);
     }
 
@@ -90,6 +103,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeIdSub(int idTask) {
         SubTask subTask = listSubTask.get(idTask);
         removeFromEpic(subTask);
+        inMemory.remove(idTask);
         listSubTask.remove(idTask);
     }
 
@@ -99,7 +113,9 @@ public class InMemoryTaskManager implements TaskManager {
         ArrayList<SubTask> obj = epic.getSubTasks();
         for (SubTask subTask : obj) {
             listSubTask.remove(subTask.getIdNumber());
+            inMemory.remove(subTask.getIdNumber());
         }
+        inMemory.remove(idTask);
         listEpic.remove(idTask);
     }
 
@@ -164,12 +180,13 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public void removeFromEpic(SubTask subtask) {
-        Epic epic = getEpicById(subtask.getMainEpic());
+    public void removeFromEpic(SubTask sub) {
+        Epic epic = listEpic.get(sub.getMainEpic());
         ArrayList<SubTask> obj = epic.getSubTasks();
         for (SubTask subTask : obj) {
-            if (subTask.getIdNumber() == subTask.getIdNumber()) {
+            if (subTask.getIdNumber() == sub.getIdNumber()) {
                 obj.remove(subTask);
+                inMemory.remove(subTask.getIdNumber());
                 epic.setSubTasks(obj);
                 setStatusEpic(epic);
                 break;
