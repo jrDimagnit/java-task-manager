@@ -10,10 +10,15 @@ import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
     private int idSet = 0;
-    private HistoryManager inMemory = Managers.getDefaultHistory();
+    private HistoryManager inMemory;
+
     private HashMap<Integer, Task> listTask = new HashMap<>();
     private HashMap<Integer, SubTask> listSubTask = new HashMap<>();
     private HashMap<Integer, Epic> listEpic = new HashMap<>();
+
+    public InMemoryTaskManager(HistoryManager inMemory) {
+        this.inMemory = inMemory;
+    }
 
     @Override
     public int changeId() {
