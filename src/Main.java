@@ -8,19 +8,19 @@ public class Main {
     public static void main(String[] args) {
         TaskManager manager = Managers.getDefault();
 
-        Task task = new Task(manager.changeId(), "З", " И", StatusTask.NEW);
-        Task task1 = new Task(manager.changeId(), "З", " И", StatusTask.NEW);
-        Epic epic = new Epic(manager.changeId(), "Э", "И", StatusTask.NEW);
-        Epic epic1 = new Epic(manager.changeId(), "Э", "И", StatusTask.NEW);
-        SubTask subTask = new SubTask(manager.changeId(), "П", "I",
+        Task task = new Task(manager.changeId(), "Т1", " И", StatusTask.NEW);
+        Task task1 = new Task(manager.changeId(), "Т2", " И", StatusTask.NEW);
+        Epic epic = new Epic(manager.changeId(), "Э1", "И", StatusTask.NEW);
+        Epic epic1 = new Epic(manager.changeId(), "Э2", "И", StatusTask.NEW);
+        SubTask subTask = new SubTask(manager.changeId(), "С1", "I",
                 3, StatusTask.NEW);
-        SubTask subTask1 = new SubTask(manager.changeId(), "П", "I",
+        SubTask subTask1 = new SubTask(manager.changeId(), "С2", "I",
                 3, StatusTask.NEW);
-        SubTask subTask2 = new SubTask(manager.changeId(), "П", "I",
+        SubTask subTask2 = new SubTask(manager.changeId(), "С3", "I",
                 4, StatusTask.NEW);
-        SubTask subTask3 = new SubTask(manager.changeId(), "П", "I",
+        SubTask subTask3 = new SubTask(manager.changeId(), "С4", "I",
                 4, StatusTask.NEW);
-        SubTask subTask4 = new SubTask(manager.changeId(), "П", "I",
+        SubTask subTask4 = new SubTask(manager.changeId(), "С5", "I",
                 4, StatusTask.NEW);
 
         manager.addTask(task);

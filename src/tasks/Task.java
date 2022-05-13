@@ -4,8 +4,11 @@ public class Task {
     private int idNumber;
     private String nameTask;
     private String infoTask;
+
     private StatusTask statusTask;
 
+
+    private TypeTask typeTask;
 
     public Task(int idNumber, String nameTask, String infoTask, StatusTask statusTask) {
         this.idNumber = idNumber;
@@ -20,6 +23,14 @@ public class Task {
 
     public String getNameTask() {
         return nameTask;
+    }
+
+    public TypeTask getTypeTask() {
+        return typeTask;
+    }
+
+    public void setTypeTask(TypeTask typeTask) {
+        this.typeTask = typeTask;
     }
 
     public String getInfoTask() {
@@ -48,7 +59,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "#: " + idNumber + ", name: " + nameTask + ", info: " + infoTask + ", Stat:" +
+        return idNumber + "," + typeTask + "," + nameTask + "," + infoTask + "," +
                 statusTask;
     }
 }

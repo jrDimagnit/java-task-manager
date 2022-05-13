@@ -16,8 +16,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "#Э " + getIdNumber() + ", name: " + getNameTask() + ", stat:" +
-                getStatusTask() + ", sub:" + getSubTasks();
+        return super.toString();
     }
 
 
