@@ -162,11 +162,11 @@ public class FileBackedTasksManager extends  InMemoryTaskManager {
                     List<Integer> listHistory= new ArrayList<>(CSVSerializer.fromStringHistory(br.readLine()));
                     for (int j : listHistory) {
                         if (fileBack.listTask.containsKey(j)) {
-                            fileBack.getTaskById(j);
+                            fileBack.inMemory.addHistory(fileBack.listTask.get(j));
                         } else if (fileBack.listSubTask.containsKey(j)) {
-                            fileBack.getSubById(j);
+                            fileBack.inMemory.addHistory(fileBack.listSubTask.get(j));
                         } else {
-                            fileBack.getEpicById(j);
+                            fileBack.inMemory.addHistory(fileBack.listEpic.get(j));
                         }
                     }
                 } else {
@@ -195,13 +195,36 @@ public class FileBackedTasksManager extends  InMemoryTaskManager {
         }
     }
 
-    public static void main(String[] args)  {
-        FileBackedTasksManager fbtm = loadFromFile(String.valueOf(Path.of("src", "task.csv")));
-        //FileBackedTasksManager fbtm = new FileBackedTasksManager(Managers.getDefaultHistory(),"src\\task.csv");
-
+    public static void main(String[] args) {
+        FileBackedTasksManager fbtm = new FileBackedTasksManager(Managers.getDefaultHistory(), Managers.pathFile);
+        createTask(fbtm);
         fbtm.getAllHistory();
+        FileBackedTasksManager fbtm1 = loadFromFile(Managers.pathFile);
+
+
+        fbtm1.getAllHistory();
+
+    } static void createTask(FileBackedTasksManager fileBackTask){
+        fileBackTask.addTask(new Task(fileBackTask.changeId(), "Т1", "И", StatusTask.NEW));
+        fileBackTask.addTask(new Task(fileBackTask.changeId(), "Т2", "И", StatusTask.NEW));
+        fileBackTask.addEpic(new Epic(fileBackTask.changeId(), "Э1", "И", StatusTask.NEW));
+        fileBackTask.addEpic(new Epic(fileBackTask.changeId(), "Э2", "И", StatusTask.NEW));
+        fileBackTask.addSubTask(new SubTask(fileBackTask.changeId(), "С1", "I",
+                    3, StatusTask.NEW));
+        fileBackTask.addSubTask(new SubTask(fileBackTask.changeId(), "С2", "I",
+                    3, StatusTask.NEW));
+        fileBackTask.addSubTask(new SubTask(fileBackTask.changeId(), "С3", "I",
+                    4, StatusTask.NEW));
+        fileBackTask.addSubTask(new SubTask(fileBackTask.changeId(), "С4", "I",
+                    4, StatusTask.NEW));
+        fileBackTask.addSubTask(new SubTask(fileBackTask.changeId(), "С5", "I",
+                    4, StatusTask.NEW));
+        fileBackTask.getTaskById(1);
+        fileBackTask.getTaskById(2);
+        fileBackTask.addTask(new Task(fileBackTask.changeId(), "Т3", "И", StatusTask.NEW));
+
+        }
 
     }
-}
 
 
