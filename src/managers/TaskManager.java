@@ -5,6 +5,7 @@ import tasks.SubTask;
 import tasks.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
 
@@ -30,7 +31,6 @@ public interface TaskManager {
 
     void removeIdEpic(int idTask);
 
-
     void updateTask(Task task);
 
     void updateSubTask(SubTask subTask);
@@ -43,6 +43,19 @@ public interface TaskManager {
 
     Task getTaskById(int taskId);
 
-    void getAllHistory();
+    ArrayList<Task> getAllHistory();
+
+    void removeAllEpic();
+
+    void removeAllTask();
+
+    void removeAllSub();
+
+    void removeFromEpic(SubTask sub);
+
+    List<Task> getPrioritizedTasks();
+
+    boolean checkPriority(Task t1);
+
 
 }

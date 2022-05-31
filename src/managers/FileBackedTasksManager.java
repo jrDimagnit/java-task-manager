@@ -5,10 +5,12 @@ import tasks.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileBackedTasksManager extends  InMemoryTaskManager {
+public class FileBackedTasksManager extends InMemoryTaskManager {
 
     protected String filePath;
     static int historyId = 1;
@@ -26,10 +28,10 @@ public class FileBackedTasksManager extends  InMemoryTaskManager {
         this.filePath = filePath;
     }
 
-
-    public void setIdSet(){
+    public void setIdSet() {
         super.idSet = historyId;
     }
+
     @Override
     public void addTask(Task task) {
         super.addTask(task);
@@ -137,13 +139,13 @@ public class FileBackedTasksManager extends  InMemoryTaskManager {
         try (Writer fileWriter = new FileWriter(filePath)) {
             BufferedWriter br = new BufferedWriter(fileWriter);
             for (Task task : getAllTask()) {
-                br.write(task.toString()+"\n");
+                br.write(task.toString() + "\n");
             }
             for (Epic epic : getAllEpic()) {
-                br.write(epic.toString()+"\n");
+                br.write(epic.toString() + "\n");
             }
             for (SubTask subTask : getAllSubTask()) {
-                br.write(subTask.toString()+"\n");
+                br.write(subTask.toString() + "\n");
             }
             br.write("\n");
             br.write(CSVSerializer.toStringHistory(inMemory));
@@ -159,7 +161,7 @@ public class FileBackedTasksManager extends  InMemoryTaskManager {
             while (br.ready()) {
                 String str = br.readLine();
                 if (str.isEmpty()) {
-                    List<Integer> listHistory= new ArrayList<>(CSVSerializer.fromStringHistory(br.readLine()));
+                    List<Integer> listHistory = new ArrayList<>(CSVSerializer.fromStringHistory(br.readLine()));
                     for (int j : listHistory) {
                         if (fileBack.listTask.containsKey(j)) {
                             fileBack.inMemory.addHistory(fileBack.listTask.get(j));
@@ -171,7 +173,7 @@ public class FileBackedTasksManager extends  InMemoryTaskManager {
                     }
                 } else {
                     Task task = CSVSerializer.fromString(str);
-                    switch(task.getTypeTask()){
+                    switch (task.getTypeTask()) {
                         case TASK:
                             fileBack.listTask.put(task.getIdNumber(), task);
                             break;
@@ -186,45 +188,15 @@ public class FileBackedTasksManager extends  InMemoryTaskManager {
                     }
                     historyId++;
                 }
-            }br.close();
+            }
+            br.close();
             fileBack.setIdSet();
             return fileBack;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             throw new ManagerSaveException(e.getMessage());
         }
     }
 
-    public static void main(String[] args) {
-        FileBackedTasksManager fbtm = new FileBackedTasksManager(Managers.getDefaultHistory(), Managers.pathFile);
-        createTask(fbtm);
-        fbtm.getAllHistory();
-        FileBackedTasksManager fbtm1 = loadFromFile(Managers.pathFile);
-
-
-        fbtm1.getAllHistory();
-
-    } static void createTask(FileBackedTasksManager fileBackTask){
-        fileBackTask.addTask(new Task(fileBackTask.changeId(), "Т1", "И", StatusTask.NEW));
-        fileBackTask.addTask(new Task(fileBackTask.changeId(), "Т2", "И", StatusTask.NEW));
-        fileBackTask.addEpic(new Epic(fileBackTask.changeId(), "Э1", "И", StatusTask.NEW));
-        fileBackTask.addEpic(new Epic(fileBackTask.changeId(), "Э2", "И", StatusTask.NEW));
-        fileBackTask.addSubTask(new SubTask(fileBackTask.changeId(), "С1", "I",
-                    3, StatusTask.NEW));
-        fileBackTask.addSubTask(new SubTask(fileBackTask.changeId(), "С2", "I",
-                    3, StatusTask.NEW));
-        fileBackTask.addSubTask(new SubTask(fileBackTask.changeId(), "С3", "I",
-                    4, StatusTask.NEW));
-        fileBackTask.addSubTask(new SubTask(fileBackTask.changeId(), "С4", "I",
-                    4, StatusTask.NEW));
-        fileBackTask.addSubTask(new SubTask(fileBackTask.changeId(), "С5", "I",
-                    4, StatusTask.NEW));
-        fileBackTask.getTaskById(1);
-        fileBackTask.getTaskById(2);
-        fileBackTask.addTask(new Task(fileBackTask.changeId(), "Т3", "И", StatusTask.NEW));
-
-        }
-
-    }
+}
 
 
