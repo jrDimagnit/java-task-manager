@@ -64,7 +64,7 @@ public class Task {
         this.statusTask = statusTask;
     }
 
-    public LocalDateTime getEndTime(){
+    public LocalDateTime getEndTime() {
         return startTime.plus(duration);
     }
 
@@ -77,7 +77,7 @@ public class Task {
     }
 
     public Duration getDuration() {
-        if(duration == null){
+        if (duration == null) {
             return Duration.ofMinutes(0);
         }
         return duration;
@@ -86,7 +86,8 @@ public class Task {
     public void setDuration(Duration duration) {
         this.duration = duration;
     }
-    public void setUpDateAndDuration(LocalDateTime dateTime,Duration duration){
+
+    public void setUpDateAndDuration(LocalDateTime dateTime, Duration duration) {
         this.startTime = dateTime;
         this.duration = duration;
     }

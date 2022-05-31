@@ -1,7 +1,6 @@
 package tasks;
 
 
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,35 +23,34 @@ public class Epic extends Task {
         return super.toString();
     }
 
-    @Override
-    public Duration getDuration() {
+    public void setDuration() {
         long minutesDuration = 0;
         if (!subTasks.isEmpty()) {
             for (SubTask subTask : getSubTasks()) {
                 minutesDuration += subTask.getDuration().toMinutes();
             }
-            }
-            return Duration.ofMinutes(minutesDuration);
         }
+        super.duration = Duration.ofMinutes(minutesDuration);
+    }
 
-
-    @Override
-    public LocalDateTime getStartTime() {
+    public void setStartTime() {
         if (subTasks.isEmpty()) {
-            return LocalDateTime.of(2030, 1, 1, 0, 0);
+            startTime = LocalDateTime.of(2030, 1, 1, 0, 0);
         } else {
             LocalDateTime check = startTime;
             for (SubTask subTask : getSubTasks()) {
-                if(subTask.getStartTime().isBefore(startTime)) {
+                if (subTask.getStartTime().isBefore(startTime)) {
                     check = subTask.getStartTime();
                 }
-            }return check;
+            }
+            startTime = check;
         }
     }
-    public void setDateAndDuration(){
-        super.startTime = getStartTime();
-        super.duration = getDuration();
-        endTime = super.startTime.plus(super.duration);
+
+    public void setDateAndDuration() {
+        setStartTime();
+        setDuration();
+        endTime = startTime.plus(duration);
     }
 
     public ArrayList<SubTask> getSubTasks() {

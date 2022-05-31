@@ -2,12 +2,13 @@ package tasks;
 
 import managers.InMemoryTaskManager;
 import managers.Managers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EpicTest {
     private InMemoryTaskManager manager;
@@ -16,7 +17,7 @@ class EpicTest {
     SubTask subTask1;
 
     @BeforeEach
-     void init(){
+    void init() {
         manager = new InMemoryTaskManager(Managers.getDefaultHistory());
         epic = new Epic(manager.changeId(), "Э1", "И", StatusTask.NEW);
         subTask = new SubTask(manager.changeId(), "С1", "I",
@@ -34,34 +35,39 @@ class EpicTest {
     }
 
     @Test
-    void checkStatusEpicWithoutSub(){
+    void checkStatusEpicWithoutSub() {
         manager.removeAllSub();
-        Assertions.assertEquals(StatusTask.NEW,epic.getStatusTask());
+        assertEquals(StatusTask.NEW, epic.getStatusTask());
     }
+
     @Test
-    void checkStatusEpicWithNewSub(){
-        Assertions.assertEquals(StatusTask.NEW,epic.getStatusTask());
+    void checkStatusEpicWithNewSub() {
+        assertEquals(StatusTask.NEW, epic.getStatusTask());
     }
+
     @Test
-    void checkStatusEpicWithDoneSub(){
+    void checkStatusEpicWithDoneSub() {
         subTask.setStatusTask(StatusTask.DONE);
         subTask1.setStatusTask(StatusTask.DONE);
         manager.updateSubTask(subTask);
         manager.updateSubTask(subTask1);
-
-        Assertions.assertEquals(StatusTask.DONE,epic.getStatusTask());
+        assertEquals(StatusTask.DONE, epic.getStatusTask());
     }
+
     @Test
-    void checkStatusEpicWithDoneAndNewSub(){
+    void checkStatusEpicWithDoneAndNewSub() {
         SubTask subTask3 = new SubTask(3, "С1", "I",
                 1, StatusTask.DONE);
         subTask3.setUpDateAndDuration(LocalDateTime.of(2022, 5, 1, 10, 0),
                 Duration.ofMinutes(60));
         manager.updateSubTask(subTask3);
-        Assertions.assertEquals(StatusTask.IN_PROGRESS,epic.getStatusTask());
+        assertEquals(StatusTask.IN_PROGRESS, epic.getStatusTask());
+        assertEquals(epic.getDuration(), Duration.ofMinutes(120));
+        assertEquals(epic.getStartTime(), LocalDateTime.of(2022, 5, 1, 5, 0));
     }
+
     @Test
-    void checkStatusEpicWithAllInProgressSub(){
+    void checkStatusEpicWithAllInProgressSub() {
         SubTask subTask2 = new SubTask(2, "С1", "I",
                 1, StatusTask.IN_PROGRESS);
         subTask2.setUpDateAndDuration(LocalDateTime.of(2022, 5, 1, 5, 0),
@@ -72,6 +78,6 @@ class EpicTest {
                 Duration.ofMinutes(60));
         manager.updateSubTask(subTask2);
         manager.updateSubTask(subTask3);
-        Assertions.assertEquals(StatusTask.IN_PROGRESS,epic.getStatusTask());
+        assertEquals(StatusTask.IN_PROGRESS, epic.getStatusTask());
     }
 }
