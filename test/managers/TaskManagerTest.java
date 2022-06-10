@@ -8,7 +8,6 @@ import tasks.StatusTask;
 import tasks.SubTask;
 import tasks.Task;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,26 +24,33 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @BeforeEach
     void init() {
-        epic = new Epic(manager.changeId(), "Э1", "И", StatusTask.NEW);
-        subTask = new SubTask(manager.changeId(), "С1", "I",
+        epic = new Epic("Э1", "И", StatusTask.NEW);
+        subTask = new SubTask("С1", "I",
                 1, StatusTask.NEW);
         subTask.setUpDateAndDuration(LocalDateTime.of(2022, 5, 1, 5, 0),
-                Duration.ofMinutes(60));
-        epic1 = new Epic(manager.changeId(), "Э2", "И", StatusTask.NEW);
-        task = new Task(manager.changeId(), "T1", " И", StatusTask.NEW);
+                60);
+        epic1 = new Epic("Э2", "И", StatusTask.NEW);
+        task = new Task("T1", " И", StatusTask.NEW);
         task.setUpDateAndDuration(LocalDateTime.of(2022, 5, 1, 0, 0),
-                Duration.ofMinutes(60));
-        task1 = new Task(manager.changeId(), "Т2", " И", StatusTask.NEW);
+                60);
+        task1 = new Task("21", " И", StatusTask.NEW);
         task1.setUpDateAndDuration(LocalDateTime.of(2022, 6, 1, 10, 0),
-                Duration.ofMinutes(60));
-        subTask1 = new SubTask(manager.changeId(), "С2", "I",
+                60);
+        subTask1 = new SubTask("С2", "I",
                 1, StatusTask.NEW);
         subTask1.setUpDateAndDuration(LocalDateTime.of(2022, 5, 1, 10, 0),
-                Duration.ofMinutes(60));
+                60);
     }
 
     @Test
     void addFirstTaskTest() {
+        manager.addTask(task);
+        assertEquals(1, manager.getAllTask().size());
+    }
+
+    @Test
+    void addTaskWithEmptyDateTest() {
+        task = new Task("T1", " И", StatusTask.NEW);
         manager.addTask(task);
         assertEquals(1, manager.getAllTask().size());
     }
@@ -258,18 +264,18 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void updateTaskWithNormalTaskTest() {
         manager.addTask(task);
         assertEquals(1, manager.getAllTask().size());
-        assertEquals("T1", manager.getTaskById(4).getNameTask());
+        assertEquals("T1", manager.getTaskById(1).getNameTask());
         task1.setIdNumber(task.getIdNumber());
         manager.updateTask(task1);
         assertEquals(1, manager.getAllTask().size());
-        assertEquals("Т2", manager.getTaskById(4).getNameTask());
+        assertEquals("21", manager.getTaskById(1).getNameTask());
     }
 
     @Test
     void updateTaskWithAbnormalIdTest() {
         manager.addTask(task);
         assertEquals(1, manager.getAllTask().size());
-        assertEquals("T1", manager.getTaskById(4).getNameTask());
+        assertEquals("T1", manager.getTaskById(1).getNameTask());
         final ManagerSaveException exception = assertThrows(
                 ManagerSaveException.class,
                 () -> manager.updateTask(task1)
@@ -323,7 +329,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addEpic(epic);
         manager.addSubTask(subTask);
         manager.addSubTask(subTask1);
-        assertEquals("С2", manager.getSubById(6).getNameTask());
+        assertEquals("С2", manager.getSubById(3).getNameTask());
     }
 
     @Test
@@ -342,7 +348,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addTask(task);
         manager.addTask(task1);
         assertEquals(2, manager.getAllTask().size());
-        assertEquals("T1", manager.getTaskById(4).getNameTask());
+        assertEquals("21", manager.getTaskById(2).getNameTask());
     }
 
     @Test

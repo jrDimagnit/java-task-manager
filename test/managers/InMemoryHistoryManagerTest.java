@@ -7,7 +7,6 @@ import tasks.StatusTask;
 import tasks.SubTask;
 import tasks.Task;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,22 +23,28 @@ class InMemoryHistoryManagerTest {
     @BeforeEach
     void init() {
         manager = new InMemoryHistoryManager();
-        epic = new Epic(1, "Э1", "И", StatusTask.NEW);
-        subTask = new SubTask(2, "С1", "I",
+        epic = new Epic("Э1", "И", StatusTask.NEW);
+        epic.setIdNumber(1);
+        subTask = new SubTask("С1", "I",
                 1, StatusTask.NEW);
+        subTask.setIdNumber(2);
         subTask.setUpDateAndDuration(LocalDateTime.of(2022, 5, 1, 5, 0),
-                Duration.ofMinutes(60));
-        epic1 = new Epic(3, "Э2", "И", StatusTask.NEW);
-        task = new Task(4, "T1", " И", StatusTask.NEW);
+                60);
+        epic1 = new Epic("Э2", "И", StatusTask.NEW);
+        epic1.setIdNumber(3);
+        task = new Task("T1", " И", StatusTask.NEW);
+        task.setIdNumber(4);
         task.setUpDateAndDuration(LocalDateTime.of(2022, 5, 1, 0, 0),
-                Duration.ofMinutes(60));
-        task1 = new Task(5, "Т2", " И", StatusTask.NEW);
+                60);
+        task1 = new Task("Т2", " И", StatusTask.NEW);
+        task1.setIdNumber(5);
         task1.setUpDateAndDuration(LocalDateTime.of(2022, 6, 1, 10, 0),
-                Duration.ofMinutes(60));
-        subTask1 = new SubTask(6, "С2", "I",
+                60);
+        subTask1 = new SubTask("С2", "I",
                 1, StatusTask.NEW);
+        subTask1.setIdNumber(6);
         subTask1.setUpDateAndDuration(LocalDateTime.of(2022, 5, 1, 10, 0),
-                Duration.ofMinutes(60));
+                60);
     }
 
     @Test

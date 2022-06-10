@@ -6,13 +6,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    protected ArrayList<SubTask> subTasks = new ArrayList<>();
+    protected ArrayList<SubTask> subTasks;
     private LocalDateTime endTime;
 
-    public Epic(int idEpic, String nameTask, String info, StatusTask statusTask) {
-        super(idEpic, nameTask, info, statusTask);
+    public Epic(String nameTask, String info, StatusTask statusTask) {
+        super(nameTask, info, statusTask);
     }
-
 
     public void setSubTasks(ArrayList<SubTask> subTasks) {
         this.subTasks = subTasks;
@@ -24,22 +23,27 @@ public class Epic extends Task {
     }
 
     public void setDuration() {
-        long minutesDuration = 0;
+        int minutesDuration = 0;
         if (!subTasks.isEmpty()) {
             for (SubTask subTask : getSubTasks()) {
-                minutesDuration += subTask.getDuration().toMinutes();
+                minutesDuration += subTask.getDuration();
             }
         }
-        super.duration = Duration.ofMinutes(minutesDuration);
+        super.duration = minutesDuration;
     }
 
     public void setStartTime() {
-        if (subTasks.isEmpty()) {
-            startTime = LocalDateTime.of(2030, 1, 1, 0, 0);
+        if (subTasks == null || subTasks.isEmpty()) {
+            startTime = null;
         } else {
             LocalDateTime check = startTime;
             for (SubTask subTask : getSubTasks()) {
-                if (subTask.getStartTime().isBefore(startTime)) {
+                if (subTask.getStartTime() == null) {
+
+                } else if (startTime == null) {
+                    startTime = subTask.getStartTime();
+                    check = startTime;
+                } else if (subTask.getStartTime().isBefore(startTime)) {
                     check = subTask.getStartTime();
                 }
             }
@@ -49,11 +53,18 @@ public class Epic extends Task {
 
     public void setDateAndDuration() {
         setStartTime();
-        setDuration();
-        endTime = startTime.plus(duration);
+        if (startTime == null) {
+            endTime = null;
+        } else {
+            setDuration();
+            endTime = startTime.plus(Duration.ofMinutes(duration));
+        }
     }
 
     public ArrayList<SubTask> getSubTasks() {
+        if (subTasks == null) {
+            subTasks = new ArrayList<>();
+        }
         return subTasks;
     }
 

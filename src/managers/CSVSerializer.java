@@ -2,7 +2,6 @@ package managers;
 
 import tasks.*;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,24 +12,25 @@ public class CSVSerializer {
         String[] taskArray = value.split(",");
         switch (taskArray[1]) {
             case ("TASK"):
-                Task task = new Task(Integer.parseInt(taskArray[0]), taskArray[2], taskArray[3],
+                Task task = new Task(taskArray[2], taskArray[3],
                         StatusTask.valueOf(taskArray[4]));
-                task.setStartTime(LocalDateTime.parse(taskArray[5], task.getFormatter()));
-                task.setDuration(Duration.ofMinutes(Long.parseLong(taskArray[6])));
+                task.setIdNumber(Integer.parseInt(taskArray[0]));
+                task.setStartTime(LocalDateTime.parse(taskArray[5]));
+                task.setDuration(Integer.parseInt(taskArray[6]));
                 task.setTypeTask(TypeTask.TASK);
                 return task;
             case ("SUBTASK"):
-                SubTask subTask = new SubTask(Integer.parseInt(taskArray[0]), taskArray[2], taskArray[3],
+                SubTask subTask = new SubTask(taskArray[2], taskArray[3],
                         Integer.parseInt(taskArray[7]), StatusTask.valueOf(taskArray[4]));
-                subTask.setStartTime(LocalDateTime.parse(taskArray[5], subTask.getFormatter()));
-                subTask.setDuration(Duration.ofMinutes(Long.parseLong(taskArray[6])));
+                subTask.setIdNumber(Integer.parseInt(taskArray[0]));
+                subTask.setStartTime(LocalDateTime.parse(taskArray[5]));
+                subTask.setDuration(Integer.parseInt(taskArray[6]));
                 subTask.setTypeTask(TypeTask.SUBTASK);
                 return subTask;
             case ("EPIC"):
-                Epic epic = new Epic(Integer.parseInt(taskArray[0]), taskArray[2], taskArray[3],
+                Epic epic = new Epic(taskArray[2], taskArray[3],
                         StatusTask.valueOf(taskArray[4]));
-                epic.setStartTime(LocalDateTime.parse(taskArray[5], epic.getFormatter()));
-                epic.setDuration(Duration.ofMinutes(Long.parseLong(taskArray[6])));
+                epic.setIdNumber(Integer.parseInt(taskArray[0]));
                 epic.setTypeTask(TypeTask.EPIC);
                 return epic;
         }

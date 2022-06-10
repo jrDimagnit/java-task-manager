@@ -3,8 +3,8 @@ package tasks;
 public class SubTask extends Task {
     private Integer mainEpic;
 
-    public SubTask(int idNumber, String nameTask, String infoTask, int mainEpic, StatusTask statusTask) {
-        super(idNumber, nameTask, infoTask, statusTask);
+    public SubTask(String nameTask, String infoTask, int mainEpic, StatusTask statusTask) {
+        super(nameTask, infoTask, statusTask);
         this.mainEpic = mainEpic;
     }
 
@@ -20,5 +20,4 @@ public class SubTask extends Task {
     public String toString() {
         return super.toString() + "," + mainEpic;
     }
-
 }

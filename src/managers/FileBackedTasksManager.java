@@ -26,10 +26,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         this.filePath = filePath;
     }
 
-    public void setIdSet() {
-        super.idSet = historyId;
-    }
-
     @Override
     public void addTask(Task task) {
         super.addTask(task);
@@ -174,21 +170,35 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     switch (task.getTypeTask()) {
                         case TASK:
                             fileBack.listTask.put(task.getIdNumber(), task);
+                            if (historyId < task.getIdNumber()) {
+                                historyId = task.getIdNumber();
+                            }
                             break;
                         case SUBTASK:
                             SubTask subtask = (SubTask) task;
-                            fileBack.listSubTask.put(task.getIdNumber(), subtask);
+                            fileBack.listSubTask.put(subtask.getIdNumber(), subtask);
+                            if (fileBack.listEpic.containsKey(subtask.getMainEpic())) {
+                                Epic epic = fileBack.listEpic.get(subtask.getMainEpic());
+                                epic.getSubTasks().add(subtask);
+                                epic.setDateAndDuration();
+                            }
+                            if (historyId < subtask.getIdNumber()) {
+                                historyId = subtask.getIdNumber();
+                            }
                             break;
                         case EPIC:
                             Epic epic = (Epic) task;
-                            fileBack.listEpic.put(task.getIdNumber(), epic);
+                            epic.setDateAndDuration();
+                            fileBack.listEpic.put(epic.getIdNumber(), epic);
+                            if (historyId < epic.getIdNumber()) {
+                                historyId = epic.getIdNumber();
+                            }
                             break;
                     }
-                    historyId++;
                 }
             }
+            fileBack.setIdSet(historyId);
             br.close();
-            fileBack.setIdSet();
             return fileBack;
         } catch (Exception e) {
             throw new ManagerSaveException(e.getMessage());

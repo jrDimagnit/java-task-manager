@@ -2,29 +2,25 @@ package tasks;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Task {
-    private int idNumber;
+    private Integer idNumber;
     private String nameTask;
     private String infoTask;
     private StatusTask statusTask;
 
     protected LocalDateTime startTime;
-    protected Duration duration;
+    protected Integer duration;
 
     private TypeTask typeTask;
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-
-    public Task(int idNumber, String nameTask, String infoTask, StatusTask statusTask) {
-        this.idNumber = idNumber;
+    public Task(String nameTask, String infoTask, StatusTask statusTask) {
         this.nameTask = nameTask;
         this.infoTask = infoTask;
         this.statusTask = statusTask;
     }
 
-    public int getIdNumber() {
+    public Integer getIdNumber() {
         return idNumber;
     }
 
@@ -65,7 +61,10 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
-        return startTime.plus(duration);
+        if (startTime == null && duration == null) {
+            return null;
+        }
+        return startTime.plus(Duration.ofMinutes(duration));
     }
 
     public LocalDateTime getStartTime() {
@@ -76,29 +75,22 @@ public class Task {
         this.startTime = startTime;
     }
 
-    public Duration getDuration() {
-        if (duration == null) {
-            return Duration.ofMinutes(0);
-        }
+    public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 
-    public void setUpDateAndDuration(LocalDateTime dateTime, Duration duration) {
+    public void setUpDateAndDuration(LocalDateTime dateTime, Integer duration) {
         this.startTime = dateTime;
         this.duration = duration;
-    }
-
-    public DateTimeFormatter getFormatter() {
-        return formatter;
     }
 
     @Override
     public String toString() {
         return idNumber + "," + typeTask + "," + nameTask + "," + infoTask + "," +
-                statusTask + "," + startTime.format(formatter) + "," + duration.toMinutes();
+                statusTask + "," + startTime + "," + duration;
     }
 }
