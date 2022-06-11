@@ -125,7 +125,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
-    private void save() {
+    protected void save() {
         if (getFilePath() == null) {
             Path taskPath = Paths.get("src", "task.csv");
             setFilePath(String.valueOf(taskPath));

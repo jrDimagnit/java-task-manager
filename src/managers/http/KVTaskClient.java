@@ -1,8 +1,5 @@
 package managers.http;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -12,29 +9,13 @@ import java.net.http.HttpResponse;
 public class KVTaskClient {
     private static String kvServerUrl;
     private String apiToken;
-    private int status;
     private HttpClient client;
 
 
     public KVTaskClient(String kvServerUrl) {
         this.kvServerUrl = kvServerUrl;
         this.client = HttpClient.newHttpClient();
-    }
-
-    public String getApiToken() {
-        return kvServerUrl;
-    }
-
-    public void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
+        register();
     }
 
     public void register() {
@@ -46,8 +27,11 @@ public class KVTaskClient {
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            setApiToken(response.body());
-            setStatus(response.statusCode());
+            if (response.statusCode() == 200) {
+                apiToken = response.body();
+            } else {
+                System.out.println("Register failed!");
+            }
         } catch (IOException | InterruptedException e) {
             System.out.println(e.getMessage());
         }
@@ -62,7 +46,11 @@ public class KVTaskClient {
                 .build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            setStatus(response.statusCode());
+            if (response.statusCode() == 200) {
+                System.out.println("Данные успешно записанны!");
+            } else {
+                System.out.println("Ошибка сохранения данных!");
+            }
         } catch (IOException | InterruptedException e) {
             System.out.println(e.getMessage());
         }
@@ -78,9 +66,10 @@ public class KVTaskClient {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.body().isEmpty() || response.body() == null || response.body().equals("null")) {
                 return null;
-            } else {
-                setStatus(response.statusCode());
+            } else if (response.statusCode() == 200) {
                 return response.body();
+            } else {
+                System.out.println("Ошибка загрузки данных!");
             }
         } catch (IOException | InterruptedException e) {
             System.out.println(e.getMessage());

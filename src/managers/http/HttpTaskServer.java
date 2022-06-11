@@ -8,7 +8,6 @@ import com.google.gson.stream.JsonWriter;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import managers.Managers;
 import managers.TaskManager;
 import tasks.Epic;
 import tasks.SubTask;
@@ -28,12 +27,8 @@ import java.util.List;
 public class HttpTaskServer {
     private static final int PORT = 8080;
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private static TaskManager manager;
-    private static Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .create();
-    private static List<Task> tasks;
-    private static String response;
+    private TaskManager manager;
+    private static Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
     private static HttpServer httpServer;
 
     public HttpTaskServer(TaskManager taskManager) throws IOException {
@@ -57,13 +52,13 @@ public class HttpTaskServer {
         httpServer.stop(0);
     }
 
-    static class PriorityHandler implements HttpHandler {
+    class PriorityHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
             String method = httpExchange.getRequestMethod();
             if (method.contains("GET")) {
-                tasks = manager.getPrioritizedTasks();
-                response = gson.toJson(tasks);
+                List<Task> tasks = manager.getPrioritizedTasks();
+                String response = gson.toJson(tasks);
                 httpExchange.sendResponseHeaders(200, 0);
                 try (OutputStream os = httpExchange.getResponseBody()) {
                     os.write(response.getBytes());
@@ -75,13 +70,13 @@ public class HttpTaskServer {
         }
     }
 
-    static class HistoryHandler implements HttpHandler {
+    class HistoryHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
             String method = httpExchange.getRequestMethod();
             if (method.equals("GET")) {
-                tasks = manager.getAllHistory();
-                response = gson.toJson(tasks);
+                List<Task> tasks = manager.getAllHistory();
+                String response = gson.toJson(tasks);
                 httpExchange.sendResponseHeaders(200, 0);
                 try (OutputStream os = httpExchange.getResponseBody()) {
                     os.write(response.getBytes());
@@ -93,14 +88,14 @@ public class HttpTaskServer {
         }
     }
 
-    static class SubInEpicHandler implements HttpHandler {
+    class SubInEpicHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
             String method = httpExchange.getRequestMethod();
             String query = httpExchange.getRequestURI().getQuery();
             if (method.equals("GET") && query.startsWith("id=")) {
                 String[] splitQuery = query.split("=");
-                response = gson.toJson(manager.getEpicById(Integer.parseInt(splitQuery[1])).getSubTasks());
+                String response = gson.toJson(manager.getEpicById(Integer.parseInt(splitQuery[1])).getSubTasks());
                 httpExchange.sendResponseHeaders(200, 0);
                 try (OutputStream os = httpExchange.getResponseBody()) {
                     os.write(response.getBytes());
@@ -112,7 +107,7 @@ public class HttpTaskServer {
         }
     }
 
-    static class TaskHandler implements HttpHandler {
+    class TaskHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
             String method = httpExchange.getRequestMethod();
@@ -122,19 +117,18 @@ public class HttpTaskServer {
             switch (method) {
                 case "GET":
                     if (query == null) {
-                        tasks = manager.getAllTask();
+                        List<Task> tasks = manager.getAllTask();
                         try {
-                            response = gson.toJson(tasks);
+                            String response = gson.toJson(tasks);
+                            httpExchange.sendResponseHeaders(200, 0);
+                            OutputStream os = httpExchange.getResponseBody();
+                            os.write(response.getBytes());
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
                         }
-                        httpExchange.sendResponseHeaders(200, 0);
-                        try (OutputStream os = httpExchange.getResponseBody()) {
-                            os.write(response.getBytes());
-                        }
                     } else if (query.startsWith("id=")) {
                         String[] splitQuery = query.split("=");
-                        response = gson.toJson(manager.getTaskById(Integer.parseInt(splitQuery[1])));
+                        String response = gson.toJson(manager.getTaskById(Integer.parseInt(splitQuery[1])));
                         httpExchange.sendResponseHeaders(200, 0);
                         try (OutputStream os = httpExchange.getResponseBody()) {
                             os.write(response.getBytes());
@@ -182,7 +176,7 @@ public class HttpTaskServer {
         }
     }
 
-    static class SubTaskHandler implements HttpHandler {
+    class SubTaskHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
             String method = httpExchange.getRequestMethod();
@@ -191,15 +185,15 @@ public class HttpTaskServer {
             switch (method) {
                 case "GET":
                     if (query == null) {
-                        tasks = new ArrayList<>(manager.getAllSubTask());
-                        response = gson.toJson(tasks);
+                        List<Task> tasks = new ArrayList<>(manager.getAllSubTask());
+                        String response = gson.toJson(tasks);
                         httpExchange.sendResponseHeaders(200, 0);
                         try (OutputStream os = httpExchange.getResponseBody()) {
                             os.write(response.getBytes());
                         }
                     } else if (query.startsWith("id=")) {
                         String[] splitQuery = query.split("=");
-                        response = gson.toJson(manager.getSubById(Integer.parseInt(splitQuery[1])));
+                        String response = gson.toJson(manager.getSubById(Integer.parseInt(splitQuery[1])));
                         httpExchange.sendResponseHeaders(200, 0);
                         try (OutputStream os = httpExchange.getResponseBody()) {
                             os.write(response.getBytes());
@@ -207,8 +201,7 @@ public class HttpTaskServer {
                     }
                     break;
                 case "POST":
-                    if (body.contains("nameTask") && body.contains("infoTask") && body.contains("statusTask") &&
-                            body.contains("mainEpic")) {
+                    if (body.contains("nameTask") && body.contains("infoTask") && body.contains("statusTask") && body.contains("mainEpic")) {
                         SubTask subTask = gson.fromJson(body, SubTask.class);
                         if (subTask.getIdNumber() == null) {
                             manager.addSubTask(subTask);
@@ -246,7 +239,7 @@ public class HttpTaskServer {
         }
     }
 
-    static class EpicHandler implements HttpHandler {
+    class EpicHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
             String method = httpExchange.getRequestMethod();
@@ -255,15 +248,15 @@ public class HttpTaskServer {
             switch (method) {
                 case "GET":
                     if (query == null) {
-                        tasks = new ArrayList<>(manager.getAllEpic());
-                        response = gson.toJson(tasks);
+                        List<Task> tasks = new ArrayList<>(manager.getAllEpic());
+                        String response = gson.toJson(tasks);
                         httpExchange.sendResponseHeaders(200, 0);
                         try (OutputStream os = httpExchange.getResponseBody()) {
                             os.write(response.getBytes());
                         }
                     } else if (query.startsWith("id=")) {
                         String[] splitQuery = query.split("=");
-                        response = gson.toJson(manager.getEpicById(Integer.parseInt(splitQuery[1])));
+                        String response = gson.toJson(manager.getEpicById(Integer.parseInt(splitQuery[1])));
                         httpExchange.sendResponseHeaders(200, 0);
                         try (OutputStream os = httpExchange.getResponseBody()) {
                             os.write(response.getBytes());

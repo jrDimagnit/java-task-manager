@@ -1,7 +1,6 @@
 package managers;
 
 import managers.http.HttpTaskManager;
-import managers.http.KVTaskClient;
 
 public class Managers {
     public static String pathFile = "src\\task.csv";
@@ -12,7 +11,7 @@ public class Managers {
     }
 
     public static TaskManager getDefault() {
-        return new HttpTaskManager(new KVTaskClient(kvServerUrl));
+        return new HttpTaskManager(kvServerUrl);
     }
 
 }
